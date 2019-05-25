@@ -1,0 +1,1 @@
+web: ./bin/kick-ass --port $PORT
