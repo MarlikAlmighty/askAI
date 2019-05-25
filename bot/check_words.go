@@ -9,7 +9,7 @@ import (
 // checkWords find in text a key words
 func checkWords(text string) bool {
 
-	var keyWords = "раз два"
+	var keyWords = "стритрейсером школьниц ссылке"
 
 	clear, err := regexp.Compile("[^а-яА-Я]+")
 	if err != nil {
