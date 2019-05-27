@@ -10,9 +10,9 @@ func main() {
 
 	cfg := bot.Configuration{}
 
-	cfg.WebHook = os.Getenv("webHook")
+	cfg.WebHook = os.Getenv("WEB_HOOK")
 
-	cfg.BotToken = os.Getenv("botToken")
+	cfg.BotToken = os.Getenv("BOT_TOKEN")
 
 	cfg.Host = "0.0.0.0"
 
