@@ -1,4 +1,4 @@
-module kickHisAss
+module github.com/MarlikAlmighty/kickHisAss
 
 go 1.12
 

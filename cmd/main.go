@@ -1,7 +1,7 @@
 package main
 
 import (
-	"kickHisAss/bot"
+	"github.com/MarlikAlmighty/kickHisAss/bot"
 	"log"
 	"os"
 )
