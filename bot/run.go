@@ -50,6 +50,7 @@ func Run(cfg *Configuration) error {
 			}
 
 			var f = false
+			tm := int64(update.Message.Date + 1800) // Restrict on half an hour
 
 			// restrict user
 			if api, err := bot.RestrictChatMember(tgbotapi.RestrictChatMemberConfig{
@@ -61,7 +62,7 @@ func Run(cfg *Configuration) error {
 				CanSendMediaMessages: &f,
 				CanSendOtherMessages: &f,
 				CanAddWebPagePreviews: &f,
-				UntilDate: int64(time.Duration(5) * time.Minute),
+				UntilDate: tm,
 			}); err != nil {
 				log.Printf("Err restrict user: %v\n", api.Result)
 			}
