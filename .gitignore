@@ -1,5 +1,2 @@
 .idea/
-.gitignore
-.dockerignore
-docker/
-*.yml
+bin/

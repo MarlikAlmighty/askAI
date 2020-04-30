@@ -35,7 +35,7 @@ func Run(cfg *Configuration) error {
 	defer cancel()
 	go loop(ctx, bot)
 
-	log.Printf("Starting, bot on: http://%s\n", cfg.Host+":"+cfg.Port)
+	log.Printf("Let's go, bot serving on: %s\n", cfg.Host+":"+cfg.Port)
 	return http.ListenAndServe(cfg.Host+":"+cfg.Port, nil)
 }
 
