@@ -1,6 +1,7 @@
 package bot
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"time"
@@ -18,7 +19,6 @@ type Configuration struct {
 
 // Run start bot
 func Run(cfg *Configuration) error {
-
 	// Start botAPI with token
 	bot, err := tgbotapi.NewBotAPI(cfg.BotToken)
 	if err != nil {
@@ -31,15 +31,24 @@ func Run(cfg *Configuration) error {
 		return err
 	}
 
-	updates := bot.ListenForWebhook("/")
-
-	go http.ListenAndServe(cfg.Host+":"+cfg.Port, nil)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	go loop(ctx, bot)
 
 	log.Printf("Starting, bot on: http://%s\n", cfg.Host+":"+cfg.Port)
+	return http.ListenAndServe(cfg.Host+":"+cfg.Port, nil)
+}
 
-	for update := range updates {
-
-		if ok := checkWords(update.Message.Text); ok {
+func loop(ctx context.Context, bot *tgbotapi.BotAPI) {
+	updates := bot.ListenForWebhook("/")
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case update := <-updates:
+			if ok := checkWords(update.Message.Text); !ok {
+				continue
+			}
 
 			// delete message
 			if api, err := bot.DeleteMessage(tgbotapi.DeleteMessageConfig{
@@ -58,11 +67,11 @@ func Run(cfg *Configuration) error {
 					ChatID: update.Message.Chat.ID,
 					UserID: update.Message.From.ID,
 				},
-				CanSendMessages: &f,
-				CanSendMediaMessages: &f,
-				CanSendOtherMessages: &f,
+				CanSendMessages:       &f,
+				CanSendMediaMessages:  &f,
+				CanSendOtherMessages:  &f,
 				CanAddWebPagePreviews: &f,
-				UntilDate: tm,
+				UntilDate:             tm,
 			}); err != nil {
 				log.Printf("Err restrict user: %v\n", api.Result)
 			}
@@ -77,8 +86,6 @@ func Run(cfg *Configuration) error {
 			}); err != nil {
 				log.Printf("Err kick user: %v\n", api.Result)
 			}
-
 		}
 	}
-	return nil
 }
