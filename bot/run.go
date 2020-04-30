@@ -2,6 +2,7 @@ package bot
 
 import (
 	"context"
+	"github.com/MarlikAlmighty/kickHisAss/models"
 	"log"
 	"net/http"
 	"time"
@@ -9,24 +10,16 @@ import (
 	tgbotapi "gopkg.in/telegram-bot-api.v4"
 )
 
-// Config for bot for starting
-type Configuration struct {
-	Host     string `json:"host,omitempty"`
-	Port     string `json:"port,omitempty"`
-	BotToken string `json:"bot_token,omitempty"`
-	WebHook  string `json:"web_hook,omitempty"`
-}
-
 // Run start bot
-func Run(cfg *Configuration) error {
+func Run(cfg *models.Config) error {
 	// Start botAPI with token
-	bot, err := tgbotapi.NewBotAPI(cfg.BotToken)
+	bot, err := tgbotapi.NewBotAPI(*cfg.BotToken)
 	if err != nil {
 		return err
 	}
 
 	// Set WebHook bots
-	_, err = bot.SetWebhook(tgbotapi.NewWebhook(cfg.WebHook + cfg.BotToken))
+	_, err = bot.SetWebhook(tgbotapi.NewWebhook(*cfg.WebHook + *cfg.BotToken))
 	if err != nil {
 		return err
 	}
@@ -35,8 +28,8 @@ func Run(cfg *Configuration) error {
 	defer cancel()
 	go loop(ctx, bot)
 
-	log.Printf("Let's go, bot serving on: %s\n", cfg.Host+":"+cfg.Port)
-	return http.ListenAndServe(cfg.Host+":"+cfg.Port, nil)
+	log.Printf("Let's go, bot serving on: %s\n", *cfg.Host+":"+*cfg.Port)
+	return http.ListenAndServe(*cfg.Host+":"+*cfg.Port, nil)
 }
 
 func loop(ctx context.Context, bot *tgbotapi.BotAPI) {
