@@ -6,7 +6,7 @@ COPY . .
 
 RUN go build -o /go/src/kickHisAss/kick /go/src/kickHisAss/cmd/main.go
 
-FROM alpine:3.12
+FROM alpine:3.14
 
 COPY --from=builder /go/src/kickHisAss/kick /
 
