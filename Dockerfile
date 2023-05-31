@@ -4,15 +4,15 @@ WORKDIR /go/src/kickHisAss
 
 COPY . .
 
-RUN go build -o /go/src/kickHisAss/kick /go/src/kickHisAss/cmd/main.go
+RUN go build -o /go/src/kickHisAss/bot /go/src/kickHisAss/cmd/main.go
 
 FROM alpine:3.14
 
-COPY --from=builder /go/src/kickHisAss/kick /
+COPY --from=builder /go/src/kickHisAss/bot /
 
-ENV WEB_HOOK="https://domen.com/"
+ENV AI_TOKEN="XXX"
 ENV BOT_TOKEN="XXXX:XXXX"
-ENV PORT="3000"
+ENV CHANNEL="-100XXX"
 
 EXPOSE 3000
-CMD ["/kick"]
+CMD ["/bot"]

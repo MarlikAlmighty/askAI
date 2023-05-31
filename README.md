@@ -1,3 +1,17 @@
-# kickHisAss
+# Bot for AI
 
-Bot for Telegram, restrict, ban users by keywords, and delete message. Bot @kickHisAss
+
+```shell
+App for the @GolangHouse channel telegram. 
+For communication with GPT-3.5 Turbo model and users.
+```
+
+### RUN
+
+```shell
+$ export AI_TOKEN="XXX"
+$ export BOT_TOKEN="XXX:XXX"
+$ export CHANNEL="-100XXX"
+
+go run ./cmd/...
+```
