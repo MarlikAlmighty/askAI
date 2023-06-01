@@ -9,7 +9,7 @@ import (
 	"github.com/sashabaranov/go-openai"
 )
 
-func groupChat(client *openai.Client, bot *tgbotapi.BotAPI, userID int64, mess string) (int64, string, error) {
+func groupChat(client *openai.Client, bot *tgbotapi.BotAPI, userID int64, messID int, mess string) (int64, string, error) {
 
 	if len(mess) > 4097 {
 		return 0, "", errors.New("This model's maximum context length is 4097 tokens.")
@@ -34,8 +34,9 @@ func groupChat(client *openai.Client, bot *tgbotapi.BotAPI, userID int64, mess s
 		return 0, "", err
 	}
 
-	msg := tgbotapi.NewMessage(-1001285932539, resp.Choices[0].Message.Content)
-	//msg.ReplyToMessageID = messID
+	// -1001285932539
+	msg := tgbotapi.NewMessage(userID, resp.Choices[0].Message.Content)
+	msg.ReplyToMessageID = messID
 
 	if _, err = bot.Send(msg); err != nil {
 		log.Printf("send message to user error: %v\n", err)

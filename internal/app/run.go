@@ -59,7 +59,8 @@ func Run() error {
 
 			if matched := reg.MatchString(mess); matched {
 
-				userID := update.Message.From.ID
+				userID := update.Message.Chat.ID
+				messID := update.Message.MessageID
 
 				<-limiter
 
@@ -67,7 +68,7 @@ func Run() error {
 
 				users.Set(userID, mess)
 
-				userID, mess, err = groupChat(clientAI, bot, userID, mess)
+				userID, mess, err = groupChat(clientAI, bot, userID, messID, mess)
 				if err != nil {
 					return err
 				}
