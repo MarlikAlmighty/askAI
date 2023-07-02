@@ -8,6 +8,7 @@ import (
 // Pusher for assertion
 type Pusher interface {
 	Set(userID, msg string)
+	Get(userID int64) []openai.ChatCompletionMessage
 	Clear()
 }
 
@@ -17,30 +18,35 @@ type UserData struct {
 	mux sync.Mutex
 }
 
-// NewData simple constructor
-func NewData() *UserData {
+// New simple constructor
+func New() *UserData {
 	return &UserData{
 		ID: make(map[int64][]openai.ChatCompletionMessage),
 	}
 }
 
 // Set added data to map
-func (r *UserData) Set(userID int64, msg string) {
-	r.mux.Lock()
-	messages := make([]openai.ChatCompletionMessage, 0)
-	messages = append(messages, openai.ChatCompletionMessage{
-		Role:    openai.ChatMessageRoleUser,
-		Content: msg,
-	})
-	r.ID[userID] = messages
-	r.mux.Unlock()
+func (data *UserData) Set(userID int64, msg []openai.ChatCompletionMessage) {
+	data.mux.Lock()
+	mp := data.ID[userID]
+	mp = append(mp, msg...)
+	data.ID[userID] = mp
+	data.mux.Unlock()
+}
+
+// Get data from map
+func (data *UserData) Get(userID int64) []openai.ChatCompletionMessage {
+	data.mux.Lock()
+	mp := data.ID[userID]
+	data.mux.Unlock()
+	return mp
 }
 
 // Clear map
-func (r *UserData) Clear() {
-	r.mux.Lock()
-	if len(r.ID) > 0 {
-		r.ID = make(map[int64][]openai.ChatCompletionMessage)
+func (data *UserData) Clear() {
+	data.mux.Lock()
+	if len(data.ID) > 0 {
+		data.ID = make(map[int64][]openai.ChatCompletionMessage)
 	}
-	r.mux.Unlock()
+	data.mux.Unlock()
 }

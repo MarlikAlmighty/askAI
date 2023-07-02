@@ -20,8 +20,8 @@ func Run() error {
 		return err
 	}
 
-	// new map whereis saved data
-	users := data.NewData()
+	// new where we saved data
+	users := data.New()
 
 	// client ai
 	clientAI := openai.NewClient(cfg.AiToken)
@@ -50,7 +50,7 @@ func Run() error {
 
 		if update.Message != nil {
 
-			// only my channel
+			// only my channel from config
 			if update.Message.Chat.ID != cfg.Channel {
 				continue
 			}
@@ -59,21 +59,16 @@ func Run() error {
 
 			if matched := reg.MatchString(mess); matched {
 
+				<-limiter
+
 				userID := update.Message.Chat.ID
 				messID := update.Message.MessageID
 
-				<-limiter
-
 				mess = clearText(mess, reg)
 
-				users.Set(userID, mess)
-
-				userID, mess, err = groupChat(clientAI, bot, userID, messID, mess)
-				if err != nil {
+				if err = users.Send(clientAI, bot, userID, messID, mess); err != nil {
 					return err
 				}
-
-				users.Set(userID, mess)
 			}
 		}
 	}

@@ -1,37 +1,54 @@
-package app
+package data
 
 import (
 	"context"
 	"log"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/pkg/errors"
 	"github.com/sashabaranov/go-openai"
 )
 
-func groupChat(client *openai.Client, bot *tgbotapi.BotAPI, userID int64, messID int, mess string) (int64, string, error) {
+func (data *UserData) Send(client *openai.Client, bot *tgbotapi.BotAPI, userID int64, messID int, mess string) error {
 
 	if len(mess) > 4097 {
-		return 0, "", errors.New("This model's maximum context length is 4097 tokens.")
+
+		msg := tgbotapi.NewMessage(userID, "this model's maximum context length is 4097 tokens...")
+		msg.ReplyToMessageID = messID
+
+		if _, err := bot.Send(msg); err != nil {
+			log.Printf("send message to user error: %v\n", err)
+			return err
+		}
+
+		return nil
 	}
 
-	messages := make([]openai.ChatCompletionMessage, 0)
+	messages := data.Get(userID)
+
+	if len(mess) > 4097 {
+		log.Printf("this model's maximum context length is 4097 tokens...")
+		data.Clear()
+	}
+
 	messages = append(messages, openai.ChatCompletionMessage{
 		Role:    openai.ChatMessageRoleUser,
 		Content: mess,
 	})
 
-	resp, err := client.CreateChatCompletion(
+	var (
+		resp openai.ChatCompletionResponse
+		err  error
+	)
+
+	if resp, err = client.CreateChatCompletion(
 		context.Background(),
 		openai.ChatCompletionRequest{
 			Model:    openai.GPT3Dot5Turbo,
 			Messages: messages,
 		},
-	)
-
-	if err != nil {
+	); err != nil {
 		log.Printf("chat completion error: %v\n", err)
-		return 0, "", err
+		return err
 	}
 
 	// -1001285932539
@@ -40,7 +57,7 @@ func groupChat(client *openai.Client, bot *tgbotapi.BotAPI, userID int64, messID
 
 	if _, err = bot.Send(msg); err != nil {
 		log.Printf("send message to user error: %v\n", err)
-		return 0, "", err
+		return err
 	}
 
 	messages = append(messages, openai.ChatCompletionMessage{
@@ -48,5 +65,7 @@ func groupChat(client *openai.Client, bot *tgbotapi.BotAPI, userID int64, messID
 		Content: resp.Choices[0].Message.Content,
 	})
 
-	return userID, resp.Choices[0].Message.Content, nil
+	data.Set(userID, messages)
+
+	return nil
 }
