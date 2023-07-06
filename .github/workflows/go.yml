@@ -43,7 +43,7 @@ jobs:
       run: CGO_ENABLED=0 GOOS=linux go build -o bot -ldflags '-w -s' ./cmd/...
 
   deploy:
-    - uses: actions/checkout@v3
+    - uses: actions/deploy@v2
       with:
         fetch-depth: 0
         ref: main
