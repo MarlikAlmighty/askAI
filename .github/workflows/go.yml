@@ -29,5 +29,5 @@ jobs:
       run: go build -v ./cmd/...
 
     - name: Strip
-      run: /usr/bin/upx ./bin/app
+      run: /usr/bin/upx ./bin/bot
 
