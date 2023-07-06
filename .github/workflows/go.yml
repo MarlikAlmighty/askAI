@@ -42,8 +42,7 @@ jobs:
     - name: Build
       run: CGO_ENABLED=0 GOOS=linux go build -o bot -ldflags '-w -s' ./cmd/...
 
-  deploy:
-    steps:
+    - name: deploy:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
