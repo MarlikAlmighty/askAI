@@ -44,7 +44,7 @@ jobs:
 
   deploy:
     - uses: actions/checkout@v3
-        with:
+      with:
         fetch-depth: 0
         ref: main 
     - uses: ayr-ton/git-deploy-action@v1.1
