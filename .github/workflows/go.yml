@@ -58,7 +58,7 @@ jobs:
       with:
         fetch-depth: 0
         ref: master 
-    - uses: ayr-ton/git-deploy-action@v1.1
+    - uses: net-engine/github-repository-sync-action@v1
       with:
         ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
         target_repo_url: ${{ secrets.TARGET_REPO_URL }}
