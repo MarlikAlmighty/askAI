@@ -17,6 +17,7 @@ import (
 func Run() error {
 
 	log.Println("[LOG]: Run Vasya, run...")
+
 	fmt.Print("[FMT]: Run Vasya, run...")
 
 	// get env
