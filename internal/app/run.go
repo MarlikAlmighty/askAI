@@ -1,6 +1,7 @@
 package app
 
 import (
+	"log"
 	"regexp"
 	"time"
 
@@ -13,6 +14,8 @@ import (
 
 // Run start bot
 func Run() error {
+
+	log.Println("Run Vasya, run...")
 
 	// get env
 	cfg := config.New()
