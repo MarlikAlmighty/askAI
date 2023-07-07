@@ -58,8 +58,11 @@ jobs:
       with:
         fetch-depth: 0
         ref: master 
-    - uses: net-engine/github-repository-sync-action@v1
+    - uses: wei/git-sync@v3
       with:
-        ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-        target_repo_url: ${{ secrets.TARGET_REPO_URL }}
-        target_branch: dev
+        source_repo: git@github.com:MarlikAlmighty/kickHisAss.git
+        source_branch: "master"
+        destination_repo: ${{ secrets.TARGET_REPO_URL }}
+        destination_branch: "dev"
+        ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} 
+
