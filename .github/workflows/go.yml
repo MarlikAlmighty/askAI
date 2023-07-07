@@ -8,13 +8,13 @@ on:
 
 jobs:
 
-  build:
+  audit:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Set up Go
-      uses: actions/setup-go@v3
+      uses: actions/setup-go@v4
       with:
         go-version: 1.19
 
@@ -39,10 +39,21 @@ jobs:
     - name: Test
       run: go test -v ./cmd/...
 
-    - name: Build
-      run: CGO_ENABLED=0 GOOS=linux go build -o ./bin/bot -ldflags '-w -s' ./cmd/...
 
   deploy:
+    runs-on: ubuntu-20.04
+    needs: audit
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: 1.19
+      
+    - name: Build
+      run: CGO_ENABLED=0 GOOS=linux go build -o ./bin/bot -ldflags '-w -s' ./cmd/...
+      
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
