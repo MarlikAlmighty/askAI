@@ -53,11 +53,11 @@ jobs:
       
     - name: Build
       run: CGO_ENABLED=0 GOOS=linux go build -o ./bin/bot -ldflags '-w -s' ./cmd/...
-      
+
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
-        ref: main 
+        ref: master 
     - uses: ayr-ton/git-deploy-action@v1.1
       with:
         ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
