@@ -62,9 +62,9 @@ jobs:
       with:
         source_repo: git@github.com:MarlikAlmighty/kickHisAss.git
         source_branch: "master"
-        destination_repo: ${{ secrets.TARGET_REPO_URL }}
+        destination_repo: git@52.33.191.141:/home/ubuntu/bot
         destination_branch: "dev"
         ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} 
 
-        
+
 
