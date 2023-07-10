@@ -1,3 +1,11 @@
 .idea/
-
-
+.github/
+cmd/
+internal/
+.gitignore
+bot.service
+Dockerfile
+go.mod
+go.sum
+Makefile
+README.md
