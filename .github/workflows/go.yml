@@ -65,7 +65,6 @@ jobs:
         cd ${{ secrets.HOME }} &&
         git checkout dev &&
         git fetch --all &&
-        git merge dev &&
         sudo systemctl restart bot
         '
            
