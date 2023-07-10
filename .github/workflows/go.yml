@@ -66,7 +66,7 @@ jobs:
         git checkout dev &&
         git fetch --all &&
         git pull origin dev &&
-        env -i git merge dev
+        git merge dev
         sudo systemctl restart bot
         '
            
