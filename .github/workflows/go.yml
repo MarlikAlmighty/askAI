@@ -60,7 +60,7 @@ jobs:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
     - name: Run Command
       run: |
-        ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${{secrets.USER_NAME}}@${{secrets.SSH_HOST}}
+        ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${{ secrets.SSH_PRIVATE_KEY }} ${{secrets.USER_NAME}}@${{secrets.SSH_HOST}}
         cd /home/ubuntu/bot &&
         git checkout dev &&
         git fetch --all &&
