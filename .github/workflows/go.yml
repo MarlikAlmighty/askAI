@@ -2,9 +2,9 @@ name: Go
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "dev" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "dev" ]
 
 jobs:
 
@@ -64,8 +64,8 @@ jobs:
         cd /home/ubuntu/bot &&
         git checkout dev &&
         git fetch --all &&
-        git reset --hard origin/master &&
-        git pull origin/master &&
+        git reset --hard origin/dev &&
+        git pull origin/dev &&
         sudo systemctl restart bot
         '
               
