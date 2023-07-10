@@ -64,8 +64,8 @@ jobs:
         cd /home/ubuntu/bot &&
         git checkout dev &&
         git fetch --all &&
-        git reset --hard origin dev -- &&
-        git pull origin dev -- &&
+        git reset --hard origin/dev -- &&
+        git pull origin dev &&
         sudo systemctl restart bot
         '
            
