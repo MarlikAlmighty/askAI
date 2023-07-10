@@ -55,14 +55,12 @@ jobs:
       run: CGO_ENABLED=0 GOOS=linux go build -o ./bin/bot -ldflags '-w -s' ./cmd/...
 
     - name: Deploy
-      env:
-        PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        HOSTNAME: ${{secrets.SSH_HOST}}
-        USER_NAME: ${{secrets.USER_NAME}}
-      
+      uses: webfactory/ssh-agent@v0.5.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    - name: Run Command
       run: |
-        echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-        ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} 
+        ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${{secrets.USER_NAME}}@${{secrets.SSH_HOST}}
         cd /home/ubuntu/bot &&
         git checkout dev &&
         git fetch --all &&
