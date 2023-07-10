@@ -60,14 +60,14 @@ jobs:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
     - name: Run Command
       run: |
-      
+        ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${{secrets.USER_NAME}}@${{secrets.SSH_HOST}} '
         cd /home/ubuntu/bot &&
         git checkout dev &&
         git fetch --all &&
         git reset --hard origin dev &&
         git pull origin dev &&
         sudo systemctl restart bot
-        
+        '
               
 
 
