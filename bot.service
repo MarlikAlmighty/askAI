@@ -1,0 +1,21 @@
+[Unit]
+Description=Bot
+After=network.target
+
+[Service]
+Environment=AI_TOKEN="XXX"
+Environment=BOT_TOKEN="XXX:XXX"
+Environment=CHANNEL="-100XXX"
+Type=simple
+PIDFile=/home/ubuntu/bot/bot.pid
+WorkingDirectory=/home/ubuntu/bot
+ExecStart=/home/ubuntu/bot/bin/bot
+ExecStop=/bin/kill -INT $MAINPID
+User=ubuntu
+Group=ubuntu
+Restart=always
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
